@@ -1,30 +1,62 @@
-﻿using BusinessRuleEngine.Exceptions;
-using BusinessRuleEngine.Models;
+﻿// <copyright file="PaymentProcess.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace BusinessRuleEngine.PaymentHelpers
 {
+    using BusinessRuleEngine.Exceptions;
+    using BusinessRuleEngine.Models;
+
+    /// <summary>
+    /// Class for common payment process rules.
+    /// </summary>
     public static class PaymentProcess
     {
+        /// <summary>
+        /// Generates Commission Payment.
+        /// </summary>
+        /// <param name="product">Book object.</param>
+        /// <returns>Status message.</returns>
         public static string GenerateCommissionPayment(this Book product)
         {
             return CommissionPaymentProcess(product);
         }
 
+        /// <summary>
+        /// Generates Commission Payment.
+        /// </summary>
+        /// <param name="product">Book object.</param>
+        /// <returns>Status message.</returns>
         public static string GenerateCommissionPayment(this PhysicalProduct product)
         {
             return CommissionPaymentProcess(product);
         }
 
+        /// <summary>
+        /// Sends Email To Owner.
+        /// </summary>
+        /// <param name="product">Derivative of Product class.</param>
+        /// <returns>Status message.</returns>
         public static string SendEmailToOwner(this MembershipUpgrade product)
         {
             return NotifyOwner(product);
         }
 
+        /// <summary>
+        /// Sends Email To Owner.
+        /// </summary>
+        /// <param name="product">Derivative of Product class.</param>
+        /// <returns>Status message.</returns>
         public static string SendEmailToOwner(this MembershipCreate product)
         {
             return NotifyOwner(product);
         }
 
+        /// <summary>
+        /// Generates Packing Slip.
+        /// </summary>
+        /// <param name="product">Derivative of Product class.</param>
+        /// <returns>Status message.</returns>
         public static string GeneratePackingSlip(this Product product)
         {
             if (product is PhysicalProduct)

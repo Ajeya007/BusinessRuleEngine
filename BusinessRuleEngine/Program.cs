@@ -1,25 +1,41 @@
-﻿using BusinessRuleEngine.Exceptions;
-using BusinessRuleEngine.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace BusinessRuleEngine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using BusinessRuleEngine.Exceptions;
+    using BusinessRuleEngine.Models;
+
+    /// <summary>
+    /// Program class.
+    /// </summary>
     public class Program
     {
-        static readonly List<Product> products = new List<Product>();
-        static readonly List<Product> paidProducts = new List<Product>();
-        
-        static void Main(string[] args)
+        /// <summary>
+        /// Master set Products.
+        /// </summary>
+        public static readonly List<Product> Products = new List<Product>();
+
+        /// <summary>
+        /// Products chosen whose payment needs to be processed.
+        /// </summary>
+        public static readonly List<Product> PaidProducts = new List<Product>();
+
+        /// <summary>
+        /// Entry point of execution.
+        /// </summary>
+        public static void Main()
         {
             Console.WriteLine("---Welcome to Business Rule Engine---");
             InitializeProducts();
-            
+
             while (true)
             {
-                try 
+                try
                 {
                     PromptInput();
                     var productChosen = GetValidatedProduct(out bool isPaymentComplete);
@@ -27,20 +43,21 @@ namespace BusinessRuleEngine
                     {
                         break;
                     }
-                    paidProducts.Add(productChosen);
+
+                    PaidProducts.Add(productChosen);
                 }
                 catch (InvalidProductException ex)
                 {
                     Console.WriteLine(ex.Message);
                     continue;
-                }                
+                }
             }
 
-            foreach (var product in paidProducts)
+            foreach (var product in PaidProducts)
             {
                 product.TryProcessPayment(out bool isSuccess);
                 if (!isSuccess)
-                { 
+                {
                     // Throw exception with message. Continue processing other payments.
                 }
             }
@@ -49,15 +66,16 @@ namespace BusinessRuleEngine
         }
 
         private static void PromptInput()
-        {            
+        {
             Console.WriteLine("---Make payment for below products. (Choose a product by pressing the id infront of it.)---");
             Console.WriteLine("Press 0 to stop selecting products and complete the payment");
             Console.WriteLine();
             Console.WriteLine("---------------------");
-            foreach (var product in products)
+            foreach (var product in Products)
             {
-                Console.WriteLine($"{product.ProductId} : {product.ProductName}" );
+                Console.WriteLine($"{product.ProductId} : {product.ProductName}");
             }
+
             Console.WriteLine("---------------------");
             Console.WriteLine();
         }
@@ -67,7 +85,7 @@ namespace BusinessRuleEngine
             isPaymentComplete = false;
 
             if (!int.TryParse(Console.ReadLine(), out int productId)
-                || (!products.Any(x => x.ProductId == productId) && productId != 0))
+                || (!Products.Any(x => x.ProductId == productId) && productId != 0))
             {
                 throw new InvalidProductException("Please choose a valid product");
             }
@@ -77,16 +95,16 @@ namespace BusinessRuleEngine
                 return null;
             }
 
-            return products.First(x => x.ProductId == productId);
+            return Products.First(x => x.ProductId == productId);
         }
 
         private static void InitializeProducts()
         {
-            products.Add( new PhysicalProduct());
-            products.Add(new Book());
-            products.Add(new MembershipCreate());
-            products.Add(new MembershipUpgrade());
-            products.Add(new Video());
+            Products.Add(new PhysicalProduct());
+            Products.Add(new Book());
+            Products.Add(new MembershipCreate());
+            Products.Add(new MembershipUpgrade());
+            Products.Add(new Video());
         }
     }
 }
