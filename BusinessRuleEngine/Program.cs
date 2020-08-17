@@ -67,14 +67,14 @@ namespace BusinessRuleEngine
             isPaymentComplete = false;
 
             if (!int.TryParse(Console.ReadLine(), out int productId)
-                || !products.Any(x => x.ProductId == productId)
-                )
+                || (!products.Any(x => x.ProductId == productId) && productId != 0))
             {
                 throw new InvalidProductException("Please choose a valid product");
             }
             else if (productId == 0)
             {
                 isPaymentComplete = true;
+                return null;
             }
 
             return products.First(x => x.ProductId == productId);

@@ -19,14 +19,15 @@ namespace BusinessRuleEngine.Models
         public override void TryProcessPayment(out bool isSuccess)
         {
             System.Console.WriteLine($"Processing payment for  {this.ProductName}(Id: {this.ProductId})");
-            this.UpgradeMembership();
-            this.SendEmailToOwner();
+            System.Console.WriteLine(this.UpgradeMembership());
+            System.Console.WriteLine(this.SendEmailToOwner());
             isSuccess = true;
+            System.Console.WriteLine();
         }
 
-        private void UpgradeMembership()
+        private string UpgradeMembership()
         {
-            System.Console.WriteLine($"Applying membership upgrade for {this.ProductName}(Id:{this.ProductId})");
+            return $"Applying membership upgrade for {this.ProductName}(Id:{this.ProductId})";
         }
     }
 }

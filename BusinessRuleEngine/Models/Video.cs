@@ -18,8 +18,9 @@ namespace BusinessRuleEngine.Models
         public override void TryProcessPayment(out bool isSuccess)
         {
             System.Console.WriteLine($"Processing payment for  {this.ProductName}(Id: {this.ProductId})");
-            this.GeneratePackingSlip();
+            System.Console.WriteLine(this.GeneratePackingSlip());
             isSuccess = true;
+            System.Console.WriteLine();
         }
     }
 }
