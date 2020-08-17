@@ -1,4 +1,6 @@
-﻿namespace BusinessRuleEngine.Models
+﻿using BusinessRuleEngine.PaymentHelpers;
+
+namespace BusinessRuleEngine.Models
 {
     public class Video : Product
     {
@@ -11,6 +13,13 @@
         { 
             get { return "Learning to Ski";} 
             set { } 
+        }
+
+        public override void TryProcessPayment(out bool isSuccess)
+        {
+            System.Console.WriteLine($"Processing payment for  {this.ProductName}(Id: {this.ProductId})");
+            this.GeneratePackingSlip();
+            isSuccess = true;
         }
     }
 }

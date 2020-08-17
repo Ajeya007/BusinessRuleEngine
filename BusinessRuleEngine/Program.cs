@@ -1,4 +1,5 @@
-﻿using BusinessRuleEngine.Models;
+﻿using BusinessRuleEngine.Exceptions;
+using BusinessRuleEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,33 @@ namespace BusinessRuleEngine
             
             while (true)
             {
-                PromptInput();
-                var productChosen = GetValidatedProduct(out bool isPaymentComplete);
-                if (isPaymentComplete)
+                try 
                 {
-                    break;
+                    PromptInput();
+                    var productChosen = GetValidatedProduct(out bool isPaymentComplete);
+                    if (isPaymentComplete)
+                    {
+                        break;
+                    }
+                    paidProducts.Add(productChosen);
                 }
-                paidProducts.Add(productChosen);
+                catch (InvalidProductException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    continue;
+                }                
             }
+
+            foreach (var product in paidProducts)
+            {
+                product.TryProcessPayment(out bool isSuccess);
+                if (!isSuccess)
+                { 
+                    // Throw exception with message. Continue processing other payments.
+                }
+            }
+
+            Console.ReadLine();
         }
 
         private static void PromptInput()
@@ -50,7 +70,7 @@ namespace BusinessRuleEngine
                 || !products.Any(x => x.ProductId == productId)
                 )
             {
-                throw new Exception("Please choose a valid product");
+                throw new InvalidProductException("Please choose a valid product");
             }
             else if (productId == 0)
             {
